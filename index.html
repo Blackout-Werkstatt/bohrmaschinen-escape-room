@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Werkstatt-Blackout - Bohrmaschinenführerschein</title>
+
+    <!-- Pannellum-Stylesheet (lokal eingebunden, kein CDN) -->
+    <link rel="stylesheet" href="lib/pannellum/pannellum.css">
+
+    <!-- Eigenes Projekt-Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="blackout-vor-spiel">
+
+    <!-- Audio-Elemente für die Blackout-Eintritts-Sequenz.
+         Vorab geladen, damit die Sounds rechtzeitig spielen.
+         Umlaute im Dateinamen sind URL-encodiert (T%C3%BC = Tü). -->
+    <audio id="audio-tuerzu"
+           src="assets/sounds/T%C3%BCrzu.mp3"
+           preload="auto"></audio>
+    <audio id="audio-stromausfall"
+           src="assets/sounds/Soundstromausfall.mp3"
+           preload="auto"></audio>
+    <audio id="audio-alarm"
+           src="assets/sounds/Alarmton.mp3"
+           preload="auto"></audio>
+
+    <!-- Haupt-Container: Hier wird die gesamte Spiel-Oberfläche gerendert. -->
+    <div id="app">
+
+        <!-- Intro-Screen: liegt mit z-index über dem Panorama und wird
+             nach Namenseingabe ausgeblendet (Fade-Out via CSS-Klasse). -->
+        <div id="intro-screen" class="intro-screen" role="dialog" aria-labelledby="intro-warnung-titel">
+
+            <!-- Pulsierendes rotes Notlicht-Overlay (rein dekorativ). -->
+            <div class="intro-notlicht" aria-hidden="true"></div>
+
+            <!-- Zentrierter Inhalt. -->
+            <div class="intro-content">
+
+                <!-- Warnmeldungs-Block in Monospace. -->
+                <div class="intro-warnung" role="alert">
+                    <p id="intro-warnung-titel">⚠️ SYSTEM-AUSFALL ⚠️</p>
+                    <p>NOTSTROM AKTIV.</p>
+                    <p>TÜRVERRIEGELUNG AKTIVIERT.</p>
+                </div>
+
+                <!-- Erklärender Fließtext / Spielauftrag. -->
+                <p class="intro-text">
+                    Um die Werkstatt wieder zu verlassen, muss die Standbohrmaschine
+                    ordnungsgemäß aktiviert werden. Dazu müssen sechs Sicherheits-Checks
+                    bestanden werden. Jede gelöste Aufgabe aktiviert eine Kontroll-Leuchte.
+                    Schaffst du den Bohrmaschinenführerschein?
+                </p>
+
+                <!-- Formular mit Namenseingabe und Start-Button.
+                     Ein <form> erlaubt automatisches Auslösen per Enter-Taste. -->
+                <form id="intro-form" class="intro-form" novalidate>
+                    <label for="player-name" class="intro-label">Dein Name:</label>
+                    <input
+                        type="text"
+                        id="player-name"
+                        class="intro-input"
+                        name="player-name"
+                        autocomplete="off"
+                        maxlength="30"
+                        required>
+                    <button
+                        type="submit"
+                        id="start-button"
+                        class="intro-button"
+                        disabled>SPIEL STARTEN</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 360-Grad-Panorama-Container: wird von Pannellum befüllt. -->
+        <div id="panorama"></div>
+
+        <!-- Fortschrittsanzeige oben rechts (zeigt Anzahl gelöster Rätsel).
+             Liegt unter dem Intro-Screen (z-index), wird also erst nach
+             dem Ausblenden des Intros sichtbar. -->
+        <div id="fortschritt" class="fortschritt" aria-live="polite">
+            Sicherheits-Checks: <span id="fortschritt-wert">0</span>/5
+        </div>
+    </div>
+
+    <!-- Pannellum-Bibliothek (muss vor main.js geladen werden, damit window.pannellum bereit ist) -->
+    <script src="lib/pannellum/pannellum.js"></script>
+
+    <!-- html2canvas (lokal eingebunden, kein CDN).
+         Wird nur beim Klick auf "ALS BILD SPEICHERN" am Spielende genutzt.
+         Keine DSGVO-relevante Netzwerk-Anfrage. -->
+    <script src="lib/html2canvas/html2canvas.min.js" defer></script>
+
+    <!-- Spielzustand (muss vor main.js geladen werden) -->
+    <script src="js/state.js"></script>
+
+    <!-- Einheitliches Hilfesystem (window.werkstattHilfe).
+         Wird von allen Rätseln über window.werkstattHilfe.aktualisiere(...)
+         angesprochen und muss daher VOR den Puzzle-Renderern geladen werden. -->
+    <script src="js/hilfe.js"></script>
+
+    <!-- Rätsel-Renderer (registriert window.puzzleRenderer[id]) -->
+    <script src="js/puzzles.js"></script>
+    <script src="js/puzzle2.js"></script>
+    <script src="js/puzzle3.js"></script>
+    <script src="js/puzzle4.js"></script>
+    <script src="js/puzzle5.js"></script>
+
+    <!-- Lerninhalte der Info-Tafeln (window.werkstattInfoContent) -->
+    <script src="js/infoContent.js"></script>
+
+    <!-- Eigene Spiellogik -->
+    <script src="js/main.js"></script>
+</body>
+</html>
