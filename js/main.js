@@ -143,75 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Test-Skip-Modus für die Blackout-Sequenz (Strg+S auf Intro).
     skipModusInitialisieren();
-
-    // Test-Abkürzung zur Urkunde (Strg+U / Cmd+U).
-    urkundeAbkuerzungInitialisieren();
 });
-
-
-// ===========================================================
-// TEST-ABKÜRZUNG zur Urkunde (Strg+U / Cmd+U)
-// -----------------------------------------------------------
-// Springt unabhängig vom aktuellen Spielzustand direkt zum
-// Endscreen mit der Urkunde. Wird zum schnellen Testen des
-// Finales benutzt – nicht für reguläre Spieler:innen gedacht.
-//
-// Verhalten:
-//   – Falls noch kein Name eingegeben wurde, wird "TESTNAME"
-//     als Platzhalter gesetzt.
-//   – Alle 5 Sicherheits-Checks werden intern als bestanden
-//     markiert (puzzle.solved = true), damit die Urkunde mit
-//     vollständigem Spielstand gerendert wird.
-//   – preventDefault() unterdrückt den Browser-Standard
-//     (Strg+U öffnet sonst den Seiten-Quelltext).
-// ===========================================================
-function urkundeAbkuerzungInitialisieren() {
-    document.addEventListener("keydown", function (ereignis) {
-        const ctrlOrCmd = ereignis.ctrlKey || ereignis.metaKey;
-        if (!ctrlOrCmd) return;
-        if (ereignis.key !== "u" && ereignis.key !== "U") return;
-
-        ereignis.preventDefault();
-        ereignis.stopPropagation();
-
-        // Platzhalter-Name, falls Spieler:in noch keinen
-        // eingetippt hat.
-        if (!window.werkstattState.playerName ||
-            !String(window.werkstattState.playerName).trim()) {
-            window.werkstattState.playerName = "TESTNAME";
-        }
-
-        // Alle Rätsel als bestanden markieren (intern, ohne
-        // Side-Effekte aus markPuzzleSolved – das würde die
-        // Finale-Sequenz starten, wir wollen aber direkt zur
-        // Urkunde springen).
-        if (typeof getAllPuzzles === "function") {
-            getAllPuzzles().forEach(function (p) { p.solved = true; });
-        }
-        if (typeof aktualisiereFortschritt === "function") {
-            aktualisiereFortschritt();
-        }
-
-        // Falls bereits eine Urkunde im DOM hängt, nichts tun
-        // (Doppel-Auslösung verhindern).
-        if (document.querySelector(".finale-buehne")) return;
-
-        // Etwaige offene Modale wegräumen, damit die Urkunde
-        // sauber im Vordergrund erscheint.
-        document.querySelectorAll(
-            ".modal-overlay, .info-modal, .info-tafel-overlay, " +
-            ".video-modal, .notfall-overlay, .terminal-modal"
-        ).forEach(function (el) {
-            if (el.parentNode) el.parentNode.removeChild(el);
-        });
-
-        if (typeof zeigeUrkunde === "function") {
-            zeigeUrkunde();
-        }
-        console.log("Strg+U: Sprung zur Urkunde (Spieler: " +
-                    window.werkstattState.playerName + ")");
-    });
-}
 
 
 // ===========================================================
