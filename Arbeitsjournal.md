@@ -381,3 +381,113 @@
 - Kompletten Spieldurchlauf als Funktionstest
 - Entscheidung ueber naechsten Baustein: Intro-Screen ausbauen, 
   Reset-Button, oder erste Version der schriftlichen Dokumentation
+
+
+## 05.05.2026 — Tag X: Online-Veröffentlichung via GitHub Pages
+
+### Erledigt
+
+- GitHub-Account eingerichtet und auf neutralen Namen "Blackout-Werkstatt" 
+  umbenannt (statt Klarname)
+  → thematisch zur narrativen Einbettung des Spiels passend
+  → vermeidet Personenbezug in der späteren öffentlichen URL
+
+- Lokales Projekt unter Versionsverwaltung gestellt
+  → git init im Projektordner ausgeführt
+  → .gitignore angelegt (Ausschluss von .claude/, node_modules/, 
+    .DS_Store, Thumbs.db)
+  → Standardbranch von "master" auf "main" umbenannt
+    (moderne Git-Konvention, GitHub-Standard)
+  → user.name und user.email für Commit-Identität konfiguriert
+
+- Initial Commit mit 43 Dateien (~43 MB) erstellt
+  → enthält Code, Assets (Panorama-Bild, Sounds, Info-Tafeln), 
+    Lib-Dateien (Pannellum, html2canvas)
+
+- Repository auf GitHub angelegt
+  → Name: bohrmaschinen-escape-room
+  → Sichtbarkeit: Public (zwingend für kostenloses GitHub Pages Hosting)
+  → keine automatische README/LICENSE/.gitignore-Erzeugung
+    (Konflikt mit lokalem Stand vermieden)
+
+- Lokales Repo mit GitHub verbunden und Push durchgeführt
+  → Authentifizierung via Browser (Git Credential Manager)
+  → 43 Objekte erfolgreich hochgeladen
+
+- GitHub Pages aktiviert
+  → Source: Deploy from a branch (main, /root)
+  → Online-URL: https://blackout-werkstatt.github.io/bohrmaschinen-escape-room/
+  → Build- und Deploy-Zeit ca. 2 Minuten
+
+- Bug-Identifikation und -behebung via Browser-Entwicklertools (F12)
+
+  Bug 1: Groß-/Kleinschreibung des Asset-Ordners
+  → Symptom: 404-Fehler für assets/infotafel/Betriebsanweisung.png 
+    und Drehzahltabelle.png; Info-Tafeln-Popup erschien als 
+    zerstückelte Textfragmente
+  → Ursache: Ordnername lokal "Infotafel" (mit großem I), Code 
+    referenziert "infotafel" (mit kleinem i). Auf Windows 
+    case-insensitive funktional, auf Linux-Servern (GitHub Pages) 
+    case-sensitive und damit defekt.
+  → Fix: git mv-Doppel-Rename (Infotafel → infotafel_temp → infotafel), 
+    da git auf case-insensitivem Dateisystem direktes Umbenennen 
+    nicht erkennt. Commit "Fix Groß-/Kleinschreibung: Infotafel -> 
+    infotafel" gepusht. Online-Verifikation: 404-Fehler in der 
+    Konsole verschwunden.
+
+  Bug 2: Inkonsistenz im Startbildschirm-Text
+  → Symptom: Text "sechs Sicherheits-Checks" widerspricht 
+    Counter-Anzeige "0/5"
+  → Ursache: Im finalen Reduktions-Schritt von 6 auf 5 Rätsel 
+    wurde der Counter angepasst, der Intro-Text aber übersehen
+  → Fix: index.html in Notepad geöffnet, "sechs Sicherheits-Checks" 
+    durch "fünf Sicherheits-Checks" ersetzt; Commit + Push. 
+    Online-Verifikation: Startbildschirm zeigt korrekt "fünf".
+
+- Standard-Workflow für Folge-Änderungen etabliert und einmal 
+  selbständig durchlaufen:
+  Datei lokal bearbeiten → git add . → git commit -m "..." → 
+  git push → 1-3 Min warten → Strg+F5 → online verifiziert
+
+### Design- und Prozessentscheidungen
+
+- Account-Name "Blackout-Werkstatt" statt Klarname gewählt: 
+  Privatsphäre der Lehrkraft gewahrt, thematische Kohärenz 
+  des Spiels gestärkt.
+
+- GitHub Pages als Hoster gewählt: kostenfrei, kein Tracking 
+  durch das eigene Spiel, HTTPS standardmäßig aktiv, weltweite 
+  Verfügbarkeit. Damit Anforderungen "kostenfrei" und 
+  "datenschutzkonform" der Zielvereinbarung erfüllt.
+
+- Public-Repository akzeptiert: Quellcode öffentlich einsehbar. 
+  Für ein didaktisches Medium ohne Geschäftsgeheimnisse 
+  unkritisch, ermöglicht zugleich Nachnutzung durch andere 
+  Lehrkräfte (Open-Educational-Resource-Gedanke).
+
+- Iterative Qualitätssicherung über GitHub-Pages-Umgebung: 
+  Lokales Testen (localhost:8000) reicht nicht aus, da 
+  Linux-Server der GitHub-Infrastruktur sich anders verhalten 
+  als Windows-Entwicklungsumgebung (case-sensitivity, 
+  Pfadbehandlung). Erst der Live-Test deckte die Bugs auf — 
+  ein Argument für reale Test-Bedingungen statt 
+  Entwicklungs-Workarounds.
+
+### Offene Punkte
+
+- 360°-Werkstattfoto wird noch durch finale Aufnahme ersetzt
+- QR-Code für Verteilung an Schüler:innen erstellen 
+  (datenschutzkonformer Generator wie qrcode-monkey.com 
+  oder qrcode.tec-it.com)
+- Test auf weiteren Endgeräten: iPad, alternative 
+  Smartphone-Browser, Schul-Chromebook
+- Pilot-Test mit echten Schüler:innen für UX-Beobachtungen
+- Optional: Backup-Variante als gepackte HTML-Datei zum 
+  Doppelklick (für Schulen ohne Internet-Anbindung)
+- Verbleibende "sechs"-Stellen im Code prüfen 
+  (js/infoContent.js: "sechs Info-Tafeln" — Frage, ob 
+  inhaltlich passend oder Anpassungsbedarf)
+
+### Morgen geplant
+
+- (vom Verfasser zu ergänzen)

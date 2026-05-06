@@ -77,9 +77,9 @@ window.puzzleRenderer = window.puzzleRenderer || {};
         { letter: "c", begriff: "Vorschubhebel",         left: 78.3, top: 36.7, width: 28, height: 5 },
         { letter: "d", begriff: "Bohrfutter",            left: 21.7, top: 64.5, width: 28, height: 5 },
         { letter: "e", begriff: "Tiefenanschlag",        left: 73.5, top: 65.0, width: 28, height: 5 },
-        { letter: "f", begriff: "Bohrer",                left: 75.4, top: 82.7, width: 28, height: 5 },
+        { letter: "f", begriff: "Maschinenschraubstock", left: 75.4, top: 82.7, width: 28, height: 5 },
         { letter: "g", begriff: "Säule",                 left: 76.6, top: 73.8, width: 28, height: 5 },
-        { letter: "h", begriff: "Maschinenschraubstock", left: 24.7, top: 75.4, width: 28, height: 5 },
+        { letter: "h", begriff: "Bohrer",                left: 24.7, top: 75.4, width: 28, height: 5 },
         { letter: "i", begriff: "Maschinentisch",        left: 79.4, top: 92.4, width: 28, height: 5 }
     ];
 
